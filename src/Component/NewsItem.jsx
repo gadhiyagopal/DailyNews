@@ -1,20 +1,24 @@
 import React, { Component } from 'react'
+import Blankimg from './../Blankimg.jpg'
 
 export default class NewsItem extends Component {
     render() {
+        
+        const { titel , description , img , url } = this.props
+
         return (
             <>
                 <div className="col-4 my-3">
                     <div className="card">
-                        <img src="https://picsum.photos/seed/picsum/600/300" className="card-img-top" alt="..." />
+                        <img src={img ? img : Blankimg} className="card-img-top" alt="News" style={{height:"200px"}} />
                         <div className="card-body">
-                            <h5 className="card-title">Card title</h5>
-                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" className="btn btn-primary">Go somewhere</a>
+                            <h5 className="card-title">{titel ? titel.slice(0,70)+"..." : "No Titels" }</h5>
+                            <p className="card-text" style={{height:"120px"}}>{description ? description.slice(0,200)+"..." : "No Description"}</p>
+                            <a href={url} target='_blank' className="btn btn-primary">Read more</a>
                         </div>
                     </div>
                 </div>
-            </>
+            </> 
         )
     }
 }
