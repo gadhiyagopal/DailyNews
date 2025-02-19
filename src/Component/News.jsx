@@ -72,7 +72,10 @@ export default class News extends Component {
                             titel={singal.titel} 
                             description={singal.description} 
                             img={singal.urlToImage}
-                            url={singal.url}/>
+                            url={singal.url}
+                            author={singal.author}
+                            publishedAt={singal.publishedAt}
+                            source={singal.source.name}/>
                         })}
                         <div className="row my-5">
                             <div className="col">

@@ -4,16 +4,21 @@ import Blankimg from './../Blankimg.jpg'
 export default class NewsItem extends Component {
     render() {
         
-        const { titel , description , img , url ,  } = this.props
+        const { titel , description , img , url , author , publishedAt , source } = this.props
 
         return (
             <>
                 <div className="col-4 my-3">
                     <div className="card">
+                    <span className="position-absolute  badge rounded-pill bg-danger"style={{left:"10%"}}>
+                        {source}
+                        <span className="visually-hidden">unread messages</span>
+                    </span>
                         <img src={img ? img : Blankimg} className="card-img-top" alt="News" style={{height:"200px"}} />
                         <div className="card-body">
                             <h5 className="card-title">{titel ? titel.slice(0,70)+"..." : "No Titels" }</h5>
-                            <p className="card-text" style={{height:"120px"}}>{description ? description.slice(0,200)+"..." : "No Description"}</p>
+                            <p className="card-text" style={{height:"150px"}}>{description ? description.slice(0,200)+"..." : "No Description"}</p>
+                            <p style={{minHeight: "60px"}}>By {author ? author : "No Author"} on {new Date(publishedAt).toLocaleString ? publishedAt : "No Date"}</p>
                             <a href={url} target='_blank' className="btn btn-primary">Read more</a>
                         </div>
                     </div>
