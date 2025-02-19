@@ -32,14 +32,11 @@ export default class News extends Component {
     }
 
      async componentDidMount(){
-
         this.setState({loader:true})
         this.fetchMoreNew(1);
-        
     }
 
     handleNextClick = async () => {
-        
         this.setState({loader:true})
         this.fetchMoreNew(this.state.pageNo+1);
 
@@ -49,7 +46,6 @@ export default class News extends Component {
     }
 
     handleprevClick = async () => {
-        
         this.setState({loader:true})
         this.fetchMoreNew(this.state.pageNo-1);
 
@@ -61,7 +57,7 @@ export default class News extends Component {
     render() {
         return (
             <>
-                <Header titel="Top Headline" desc="Get Daily Nwes From DailyNews App."/>
+                <Header titel={ this.props.category === "general" ? "Top Headlines"  : "Top " + this.props.category.substr(0,1).toUpperCase() + this.props.category.substr(1) + " Headlines"  } desc="Get Daily Nwes From DailyNews App." />
 
                 <div className="container my-5">
                     <div className="row">
