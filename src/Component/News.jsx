@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Header from './Header'
 import NewsItem from './NewsItem'
+import Loader from './Loader';
 
 
 export default class News extends Component {
@@ -12,30 +13,34 @@ export default class News extends Component {
             totalResults:0,
             AllNews : [],
             pageNo : 1,
-            pageSize:9
+            pageSize:9,
+            loading:false
         }
     }
 
     fetchMoreNew = async ( no) => {
 
-        let url =`https://newsapi.org/v2/top-headlines?country=us&apiKey=${process.env.REACT_APP_API_KEY}&pagesize=${this.state.pageSize}&page=${ no }`
+        let url =`https://newsapi.org/v2/top-headlines?country=us&apiKey=${process.env.REACT_APP_API_KEY}&category=${this.props.category}&pagesize=${this.state.pageSize}&page=${ no }`
         let data = await fetch(url);
         let parseData = await data.json();
 
         this.setState({
             totalResults: parseData.totalResults,
-            AllNews: parseData.articles
+            AllNews: parseData.articles,
+            loader : false
         });
     }
 
      async componentDidMount(){
 
+        this.setState({loader:true})
         this.fetchMoreNew(1);
         
     }
 
     handleNextClick = async () => {
         
+        this.setState({loader:true})
         this.fetchMoreNew(this.state.pageNo+1);
 
         this.setState({
@@ -45,6 +50,7 @@ export default class News extends Component {
 
     handleprevClick = async () => {
         
+        this.setState({loader:true})
         this.fetchMoreNew(this.state.pageNo-1);
 
         this.setState({
@@ -59,8 +65,9 @@ export default class News extends Component {
 
                 <div className="container my-5">
                     <div className="row">
+                     {this.state.loader && <Loader/>}
 
-                        { this.state.AllNews.map( (singal) => {
+                        { !this.state.loader && this.state.AllNews.map( (singal) => {
                             return <NewsItem key={singal.url} 
                             titel={singal.titel} 
                             description={singal.description} 

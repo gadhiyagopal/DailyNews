@@ -4,7 +4,7 @@ import Blankimg from './../Blankimg.jpg'
 export default class NewsItem extends Component {
     render() {
         
-        const { titel , description , img , url } = this.props
+        const { titel , description , img , url ,  } = this.props
 
         return (
             <>
