@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Header from './Header'
 import NewsItem from './NewsItem'
-import allitem from './../Sempalnews.json'
 
 
 export default class News extends Component {
@@ -10,8 +9,42 @@ export default class News extends Component {
         super();
 
         this.state = {
-            AllNews : allitem.articles
+            AllNews : [],
+            pageNo : 1
         }
+    }
+
+     async componentDidMount(){
+
+        let url =`https://newsapi.org/v2/top-headlines?country=us&apiKey=2151f2ef745e4d2d81478c369f7311da&page=${ this.state.pageNo}`
+        let data = await fetch(url);
+        let parseData = await data.json();
+
+        this.setState({
+            AllNews: parseData.articles
+        });
+    }
+
+    handleNextClick = async () => {
+        let url =`https://newsapi.org/v2/top-headlines?country=us&apiKey=2151f2ef745e4d2d81478c369f7311da&page=${ this.state.pageNo+1}`
+        let data = await fetch(url);
+        let parseData = await data.json();
+
+        this.setState({
+            AllNews: parseData.articles,
+            pageNo : this.state.pageNo+1
+        });
+    }
+
+    handleprevClick = async () => {
+        let url =`https://newsapi.org/v2/top-headlines?country=us&apiKey=2151f2ef745e4d2d81478c369f7311da&page=${ this.state.pageNo-1}`
+        let data = await fetch(url);
+        let parseData = await data.json();
+
+        this.setState({
+            AllNews: parseData.articles,
+            pageNo : this.state.pageNo-1
+        });
     }
 
     render() {
@@ -29,7 +62,12 @@ export default class News extends Component {
                             img={singal.urlToImage}
                             url={singal.url}/>
                         })}
-                       
+                        <div className="row my-5">
+                            <div className="col">
+                                <button className="btn btn-primary float-start" onClick={this.handleprevClick}>Previous</button>
+                                <button className="btn btn-primary float-end" onClick={this.handleNextClick }>Next</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
