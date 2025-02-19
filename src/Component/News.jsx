@@ -9,40 +9,45 @@ export default class News extends Component {
         super();
 
         this.state = {
+            totalResults:0,
             AllNews : [],
-            pageNo : 1
+            pageNo : 1,
+            pageSize:9
         }
     }
 
-     async componentDidMount(){
+    fetchMoreNew = async ( no) => {
 
-        let url =`https://newsapi.org/v2/top-headlines?country=us&apiKey=2151f2ef745e4d2d81478c369f7311da&page=${ this.state.pageNo}`
+        let url =`https://newsapi.org/v2/top-headlines?country=us&apiKey=${process.env.REACT_APP_API_KEY}&pagesize=${this.state.pageSize}&page=${ no }`
         let data = await fetch(url);
         let parseData = await data.json();
 
         this.setState({
+            totalResults: parseData.totalResults,
             AllNews: parseData.articles
         });
     }
 
+     async componentDidMount(){
+
+        this.fetchMoreNew(1);
+        
+    }
+
     handleNextClick = async () => {
-        let url =`https://newsapi.org/v2/top-headlines?country=us&apiKey=2151f2ef745e4d2d81478c369f7311da&page=${ this.state.pageNo+1}`
-        let data = await fetch(url);
-        let parseData = await data.json();
+        
+        this.fetchMoreNew(this.state.pageNo+1);
 
         this.setState({
-            AllNews: parseData.articles,
             pageNo : this.state.pageNo+1
         });
     }
 
     handleprevClick = async () => {
-        let url =`https://newsapi.org/v2/top-headlines?country=us&apiKey=2151f2ef745e4d2d81478c369f7311da&page=${ this.state.pageNo-1}`
-        let data = await fetch(url);
-        let parseData = await data.json();
+        
+        this.fetchMoreNew(this.state.pageNo-1);
 
         this.setState({
-            AllNews: parseData.articles,
             pageNo : this.state.pageNo-1
         });
     }
@@ -64,8 +69,8 @@ export default class News extends Component {
                         })}
                         <div className="row my-5">
                             <div className="col">
-                                <button className="btn btn-primary float-start" onClick={this.handleprevClick}>Previous</button>
-                                <button className="btn btn-primary float-end" onClick={this.handleNextClick }>Next</button>
+                                <button disabled={this.state.pageNo === 1} className="btn btn-primary float-start" onClick={this.handleprevClick}>Previous</button>
+                                <button disabled={this.state.pageNo > (this.state.totalResults / this.state.pageSize)} className="btn btn-primary float-end" onClick={this.handleNextClick }>Next</button>
                             </div>
                         </div>
                     </div>
